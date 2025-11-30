@@ -1,0 +1,11 @@
+# Node.js
+node_modules/
+
+# Fichiers d'environnement (secrets)
+.env
+
+# Logs
+*.log
+
+# Autres fichiers temporaires
+.DS_Store
