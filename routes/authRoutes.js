@@ -1,3 +1,5 @@
+
+console.log("authRoutes chargé ✅");
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
@@ -40,7 +42,7 @@ router.post("/login", async (req, res) => {
 
     // Générer le token JWT
     const token = jwt.sign(
-      { id: user._id, email: user.email },
+      { id: user._id },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
