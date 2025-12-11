@@ -1,32 +1,26 @@
-require("dotenv").config();
 const express = require("express");
+const mongoose = require("mongoose");
 const cors = require("cors");
-const connectDB = require("./config/db");
-const authRoutes = require("./routes/authRoutes");
-const authMiddleware = require("./middleware/authMiddleware");
+const dotenv = require("dotenv");
+
+const authRoutes = require("./routes/auth");
+const movieRoutes = require("./routes/movies");
+
+dotenv.config();
 
 const app = express();
 
-// Connexion à MongoDB
-connectDB();
-
-// Middlewares
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
-// Route test simple
-app.get("/", (req, res) => {
-  res.send("API en marche !");
-});
-
-// Routes Auth
 app.use("/api/auth", authRoutes);
+app.use("/api/movies", movieRoutes);
 
-// Exemple route protégée
-app.get("/api/protected", authMiddleware, (req, res) => {
-  res.json({ message: "Accès autorisé", user: req.user });
+mongoose.connect(process.env.MONGO_URL)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("MongoDB error:", err));
+
+app.listen(process.env.PORT, () => {
+  console.log("Server running on port " + process.env.PORT);
 });
 
-// Lancer le serveur
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Serveur lancé sur le port ${PORT}`));
